@@ -1,0 +1,41 @@
+name: test
+
+on: push
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Cache Composer
+        uses: actions/cache@v1
+        with:
+          path: ~/.composer/cache/files
+          key: dependencies-composer-${{ hashFiles('composer.lock') }}
+
+      - name: Cache NPM
+        uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: dependencies-node-${{ hashFiles('package-lock.json') }}
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.1
+
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-interaction --no-ansi --no-progress --optimize-autoloader
+
+      - name: Install NPM dependencies
+        run: npm ci --no-audit
+
+      - name: Compile assets
+        run: npm run production
+
+      - name: Execute tests
+        run: |
+          vendor/bin/pint --test -v
+          vendor/bin/phpunit
