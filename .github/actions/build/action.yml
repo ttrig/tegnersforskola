@@ -1,0 +1,33 @@
+name: build
+
+runs:
+  using: "composite"
+  steps:
+    - name: Cache Composer
+      uses: actions/cache@v3
+      with:
+        path: ~/.composer/cache/files
+        key: dependencies-composer-${{ hashFiles('composer.lock') }}
+
+    - name: Cache NPM
+      uses: actions/cache@v3
+      with:
+        path: ~/.npm
+        key: dependencies-node-${{ hashFiles('package-lock.json') }}
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: 8.1
+
+    - name: Install Composer dependencies
+      shell: bash
+      run: composer install --prefer-dist --no-interaction --no-ansi --no-progress --optimize-autoloader
+
+    - name: Install NPM dependencies
+      shell: bash
+      run: npm ci --no-audit
+
+    - name: Compile assets
+      shell: bash
+      run: npm run production

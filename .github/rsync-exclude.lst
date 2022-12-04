@@ -1,0 +1,17 @@
+*.md
+.bash_history
+.editorconfig
+.env*
+.git*
+.ssh
+.local
+node_modules
+vendor/bin
+phpunit.xml
+pint.json
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+storage/logs/*
+storage/app/*
+tests/*
