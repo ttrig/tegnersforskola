@@ -13,7 +13,7 @@ class AppServiceProvider extends ServiceProvider
 
     private function fixPermissionOnPrivateDirectory()
     {
-        $directoryPath = config('private_directory');
+        $directoryPath = config('app.private_directory');
 
         if (! $directoryPath || ! is_readable($directoryPath)) {
             return;
