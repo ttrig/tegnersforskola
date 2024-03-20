@@ -192,4 +192,6 @@ return [
         // ...
     ])->toArray(),
 
+    'private_directory' => env('PRIVATE_DIRECTORY'),
+
 ];
